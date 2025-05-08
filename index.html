@@ -1,0 +1,449 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Diary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #2575fc;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.1);
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-btn {
+            flex: 1;
+            background: rgba(37, 117, 252, 0.1);
+            color: #2575fc;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+        }
+
+        .entry {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .entry-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .entry-content {
+            color: #343a40;
+            line-height: 1.5;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 1rem;
+            color: #6c757d;
+        }
+
+        .toggle-form span {
+            color: #2575fc;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        #profileSection {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .profile-info {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-field {
+            margin-bottom: 1rem;
+        }
+
+        .profile-field label {
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .profile-field span {
+            color: #6c757d;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #dc3545, #ff4757);
+            margin-top: 1rem;
+        }
+
+        .entry-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .entry-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .entry-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .entry-list::-webkit-scrollbar-thumb {
+            background: #2575fc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div id="loginSection">
+            <h1>Welcome Back!</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <div class="toggle-form">
+                New here? <span onclick="toggleForms()">Create Account</span>
+            </div>
+        </div>
+
+        <!-- Signup Section -->
+        <div id="signupSection" style="display: none;">
+            <h1>Create Account</h1>
+            <form id="signupForm">
+                <div class="form-group">
+                    <input type="text" id="signupName" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="signupEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signupPassword" placeholder="Password" required>
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+            <div class="toggle-form">
+                Already have an account? <span onclick="toggleForms()">Login</span>
+            </div>
+        </div>
+
+        <!-- Main Diary Section -->
+        <div id="mainSection" style="display: none;">
+            <h1>My Personal Diary</h1>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showTab('diary')">Diary</button>
+                <button class="nav-btn" onclick="showTab('profile')">Profile</button>
+            </div>
+
+            <!-- Diary Tab -->
+            <div id="diaryTab">
+                <form id="diaryForm">
+                    <div class="form-group">
+                        <textarea id="diaryEntry" placeholder="What's on your mind today?" required></textarea>
+                    </div>
+                    <button type="submit">Save Entry</button>
+                </form>
+                <div class="entry-list" id="entryList"></div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profileTab" style="display: none;">
+                <div class="profile-info">
+                    <div class="profile-field">
+                        <label>Name</label>
+                        <span id="profileName"></span>
+                    </div>
+                    <div class="profile-field">
+                        <label>Email</label>
+                        <span id="profileEmail"></span>
+                    </div>
+                </div>
+                <button onclick="toggleEditProfile()">Edit Profile</button>
+                <form id="editProfileForm" style="display: none;">
+                    <div class="form-group">
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="editEmail" required>
+                    </div>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Check for existing session
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                showMainSection();
+                loadEntries();
+            }
+        });
+
+        function toggleForms() {
+            const loginSection = document.getElementById('loginSection');
+            const signupSection = document.getElementById('signupSection');
+            loginSection.style.display = loginSection.style.display === 'none' ? 'block' : 'none';
+            signupSection.style.display = signupSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showMainSection() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('signupSection').style.display = 'none';
+            document.getElementById('mainSection').style.display = 'block';
+            loadProfile();
+        }
+
+        function showTab(tab) {
+            const diaryTab = document.getElementById('diaryTab');
+            const profileTab = document.getElementById('profileTab');
+            const buttons = document.querySelectorAll('.nav-btn');
+
+            if (tab === 'diary') {
+                diaryTab.style.display = 'block';
+                profileTab.style.display = 'none';
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                diaryTab.style.display = 'none';
+                profileTab.style.display = 'block';
+                buttons[0].classList.remove('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        // Handle Login
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUser', email);
+                showMainSection();
+                loadEntries();
+            } else {
+                alert('Invalid credentials!');
+            }
+        });
+
+        // Handle Signup
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            if (users.find(u => u.email === email)) {
+                alert('Email already exists!');
+                return;
+            }
+
+            users.push({ name, email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', email);
+            showMainSection();
+        });
+
+        // Handle Diary Entry
+        document.getElementById('diaryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const content = document.getElementById('diaryEntry').value;
+            const currentUser = localStorage.getItem('currentUser');
+            
+            const entries = JSON.parse(localStorage.getItem(`entries_${currentUser}`) || '[]');
+            entries.unshift({
+                content,
+                date: new Date().toLocaleString()
+            });
+            
+            localStorage.setItem(`entries_${currentUser}`, JSON.stringify(entries));
+            document.getElementById('diaryEntry').value = '';
+            loadEntries();
+        });
+
+        function loadEntries() {
+            const currentUser = localStorage.getItem('currentUser');
+            const entries = JSON.parse(localStorage.getItem(`entries_${currentUser}`) || '[]');
+            const entryList = document.getElementById('entryList');
+            
+            entryList.innerHTML = entries.map(entry => `
+                <div class="entry">
+                    <div class="entry-date">${entry.date}</div>
+                    <div class="entry-content">${entry.content}</div>
+                </div>
+            `).join('');
+        }
+
+        function loadProfile() {
+            const currentUser = localStorage.getItem('currentUser');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === currentUser);
+
+            if (user) {
+                document.getElementById('profileName').textContent = user.name;
+                document.getElementById('profileEmail').textContent = user.email;
+            }
+        }
+
+        function toggleEditProfile() {
+            const profileInfo = document.querySelector('.profile-info');
+            const editProfileForm = document.getElementById('editProfileForm');
+            const editButton = document.querySelector('#profileTab > button');
+
+            if (editProfileForm.style.display === 'none') {
+                const currentUser = localStorage.getItem('currentUser');
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === currentUser);
+
+                document.getElementById('editName').value = user.name;
+                document.getElementById('editEmail').value = user.email;
+
+                profileInfo.style.display = 'none';
+                editProfileForm.style.display = 'block';
+                editButton.style.display = 'none';
+            } else {
+                profileInfo.style.display = 'block';
+                editProfileForm.style.display = 'none';
+                editButton.style.display = 'block';
+            }
+        }
+
+        document.getElementById('editProfileForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newName = document.getElementById('editName').value;
+            const newEmail = document.getElementById('editEmail').value;
+            const currentUser = localStorage.getItem('currentUser');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            const userIndex = users.findIndex(u => u.email === currentUser);
+            if (userIndex !== -1) {
+                users[userIndex].name = newName;
+                users[userIndex].email = newEmail;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', newEmail);
+                
+                loadProfile();
+                toggleEditProfile();
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('mainSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('loginForm').reset();
+        }
+    </script>
+</body>
+</html>
